@@ -6,22 +6,32 @@ public class POMChallenger {
 	    public void init(int nbTours, int grandeurDuNb) {
 	    	Utile utile = new Utile();
 	    	int nbAleatoire = ((int)( Math.random()*( 10000)) + 1);
-	        int nbAleatoireAdapt[] = utile.transformation(nbAleatoire);
-	        while (nbTours > 0) 
+	        int nbAleatoireAdapt[] = utile.transformationIntEnArrayInt(nbAleatoire);
+	        boolean victoire = false;
+	        while (nbTours > 0 && victoire == false)
 	        {
-	                System.out.println("Quelle est votre proposition ? (Entrez un nombre à 4 chiffres)");
+	                System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
 	                Scanner scb = new Scanner(System.in);
 	                int proposition = scb.nextInt();
-	                int propositionAdapt[] = utile.transformation(proposition);
-	                if (proposition == nbAleatoire)
-	                {
-	                	System.out.println("==== vous avez réussi !!!");
+	                int propositionAdapt[] = utile.transformationIntEnArrayInt(proposition);
+	                if (grandeurDuNb == propositionAdapt.length)
+	               	{
+	                	if (proposition == nbAleatoire)
+	                	{
+	                		System.out.println("====");
+	                		victoire = true;
+	                	}
+	                	else
+	                	{
+	                		utile.comparaisonPlusOuMoins(nbAleatoireAdapt, propositionAdapt, grandeurDuNb);
+	                		nbTours--;	                
+	                	}
 	                }
-	                else
+	                else 
 	                {
-	                	utile.comparaison(nbAleatoireAdapt, propositionAdapt, grandeurDuNb);
-	                }
-	                nbTours--;
+	                	System.out.println("Vous avez saisi le mauvais nombre de chiffre, veuillez recommencer svp");
+	                }    
 	        }
+	        utile.issueDeLaPartie(victoire, nbAleatoire);
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Utile {
 
-	public int[] transformation (int proposition){
+	public int[] transformationIntEnArrayInt (int proposition){
 	
 		String essai = String.valueOf(proposition);
 		int[] montableau = new int[essai.length()];
@@ -16,7 +16,7 @@ public class Utile {
 		return montableau;
 }
 	
-	public void comparaison(int nbAleatoire[], int proposition[], int grandeurDuNb ) 
+	public void comparaisonPlusOuMoins(int nbAleatoire[], int proposition[], int grandeurDuNb ) 
 	{	
 		char reponse [] = new char[grandeurDuNb]; 
 
@@ -36,5 +36,14 @@ public class Utile {
 		}
 		String str = Arrays.toString(reponse);
 		System.out.println(str);
+	}
+	
+	public void issueDeLaPartie (boolean victoire, int nbAleatoire) {
+		if (victoire == true) {
+			System.out.println("Félicitations, vous avez réussi");
+		}
+		else {
+			System.out.println("Vous avez échoué, la bonne réponse était" + nbAleatoire);
+		}
 	}
 }
