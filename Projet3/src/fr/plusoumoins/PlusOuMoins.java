@@ -1,23 +1,21 @@
 package fr.plusoumoins;
 
 public class PlusOuMoins {
-    public void choixMode (int choixmode) {
+    public void choixMode (int choixmode, int nbTours, int grandeurDuNb) {
         POMChallenger POMch = new POMChallenger();
         POMDefenseur POMde = new POMDefenseur();
         POMDuel POMdu = new POMDuel();
-        int nbTours = 10;
-        int grandeurDuNb = 4;
-        if (choixmode == 1)
+        switch (choixmode)
         {
+        case 1:
                 POMch.init(nbTours,grandeurDuNb);
-        }
-        else if (choixmode == 2)
-        {
+        break;
+        case 2:
                 POMde.init();
-        }
-        else if (choixmode == 3)
-        {
+        break;
+        case 3:
                 POMdu.init();
+        break;
         }
 }
 }

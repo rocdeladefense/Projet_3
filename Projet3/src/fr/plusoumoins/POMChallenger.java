@@ -1,7 +1,5 @@
 package fr.plusoumoins;
 
-import java.util.Scanner;
-
 public class POMChallenger {
 	    public void init(int nbTours, int grandeurDuNb) {
 	    	Utile utile = new Utile();
@@ -10,23 +8,12 @@ public class POMChallenger {
 	        boolean verificationNb = true;
 	        while (nbTours > 0 && victoire == false)
 	        {
-	                System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
-	                Scanner scb = new Scanner(System.in);
-	                String proposition = scb.nextLine();
+	                String proposition = utile.phraseDeDebut(grandeurDuNb);
 	                verificationNb = utile.verificationNb(proposition, grandeurDuNb);
-	                if (verificationNb == true)
+	                if (verificationNb == true && victoire == false)
 	               	{
-	                	int propositionInt = utile.transformationStringEnInt(proposition); 
-	                	if (propositionInt == nbAleatoire)
-	                	{
-	                		System.out.println("====");
-	                		victoire = true;
-	                	}
-	                	else
-	                	{
-	                		utile.comparaisonPlusOuMoins(nbAleatoire, propositionInt, grandeurDuNb);
+	                		victoire = utile.comparaisonPlusOuMoins(nbAleatoire, proposition, grandeurDuNb, victoire);
 	                		nbTours--;	                
-	                	}
 	                }
 	                else 
 	                {
