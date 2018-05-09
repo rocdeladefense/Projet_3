@@ -11,7 +11,7 @@ public class PlusOuMoins {
                 POMch.init(nbTours,grandeurDuNb);
         break;
         case 2:
-                POMde.init();
+                POMde.init(nbTours, grandeurDuNb);
         break;
         case 3:
                 POMdu.init();

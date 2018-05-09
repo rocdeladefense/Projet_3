@@ -5,8 +5,7 @@ public class MSMChallenger {
 	public void init(int nbTours,int grandeurDuNb)
 	{
 		UtileMSM utile = new UtileMSM();
-    	int nbAleatoire = ((int)( Math.random()*( 10000)) + 1);
-    	System.out.println(nbAleatoire);
+		int nbAleatoire = utile.genererNbAleatoire(grandeurDuNb);
         boolean victoire = false;
         boolean verificationNb = true;
         while (nbTours > 0 && victoire == false)

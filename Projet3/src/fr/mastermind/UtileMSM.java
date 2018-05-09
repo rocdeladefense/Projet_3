@@ -152,4 +152,12 @@ public class UtileMSM {
                String proposition = scb.nextLine();
 			 return proposition;
 		 }
-	}
+	
+		public int genererNbAleatoire(int grandeurDuNb)
+		{
+			double a = 10;
+	    	int nbAleatoire = ((int)( Math.random()*( (Math.pow(a, ((double)grandeurDuNb))))) + 1);
+	    	return nbAleatoire;
+		}
+		
+}
