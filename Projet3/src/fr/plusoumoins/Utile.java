@@ -6,13 +6,34 @@ import java.util.Scanner;
 public class Utile {
 
 	private Scanner scb;
+	
+
+	public Utile() {
+		super();
+		p = Properties.getInstance();
+	}
 
 	public int[] transformationStringEnArrayInt (String proposition, int grandeurDuNb){
-	
 		int[] montableau = new int[grandeurDuNb];
+		int difference = 0;
+		int j = 0;
+		if (proposition.length() < grandeurDuNb)
+		{
+			difference = grandeurDuNb - proposition.length();
+		}
+		while (difference > 0)
+		{
+			montableau[j] = 0;
+			j++;
+			difference--;
+		}
+		
+		//String chaine = ("00000000000000000000000".concat(proposition));
+		//chaine = chaine.substring(chaine.length() - grandeurDuNb);
+		//System.out
 		int i = 0;
-		for (i=0; i < proposition.length(); i++){
-		  montableau[i]=Integer.parseInt(""+proposition.charAt(i));
+		for (i=0; i < proposition.length(); i++, j++){
+		  montableau[j]=Integer.parseInt(""+proposition.charAt(i));
 		}
 		return montableau;
 }
@@ -31,18 +52,70 @@ public class Utile {
 	
 	public String transformationArrayIntEnString(int [] combinaisonArrayInt)
 	{
-		
-	//	String combinaison = Arrays.toString(combinaisonArrayInt);
 		String combinaison = Arrays.toString(combinaisonArrayInt).replaceAll("\\[|\\]|,|\\s", "");
 		return combinaison;
 	}
+
+	public String transformationArrayCharEnString(char[] tableauChar)
+	{
+		String combinaison = Arrays.toString(tableauChar).replaceAll("\\[|\\]|,|\\s", "");
+		return combinaison;
+	}
 	
+	public String phraseDeDebut(int grandeurDuNb)
+	 {
+		   System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
+         scb = new Scanner(System.in);
+         String proposition = scb.nextLine();
+		 return proposition;
+	 }
+	
+	public String phraseDeDebutDefenseur (int grandeurDuNb)
+	{
+		 System.out.println("Quelle est votre solution ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
+         scb = new Scanner(System.in);
+         String reponse = scb.nextLine();
+		 return reponse;
+	}
+	
+	public void phraseErreurSaisie ()
+
+	{
+		String str = "Vous avez saisi le mauvais nombre de chiffre, ou avez inclus d'autres caractères que des chiffres, veuillez recommencer svp";
+		System.out.println(str);
+	}
+
+	public void phraseIssueDeLaPartieGagnant()
+	{
+		System.out.println("Félicitations, vous avez réussi");
+	}
+	
+	public void phraseIssueDeLaPartiePerdant(int nbAleatoire)
+	{
+		System.out.println("Vous avez échoué, la bonne réponse était " + nbAleatoire);
+	}
+	
+	public void phraseFinComparaison(int nbToursInitial, int nbTours, String proposition, String str, String type)
+	{
+		if (type == "HUMAIN")
+		{
+			System.out.println("Tour Humain " + (nbToursInitial - nbTours + 1) + " : Proposition : " + proposition + " -> Réponse " + str);
+		}
+		else if (type == "ORDI")
+		{
+			System.out.println("Tour Ordi " + (nbToursInitial - nbTours + 1) + " : Proposition : " + proposition + " -> Réponse " + str);
+		}
+		else
+		{
+			System.out.println("Tour " + (nbToursInitial - nbTours + 1) + " : Proposition : " + proposition + " -> Réponse " + str);
+		}
+	}
 	
 	public int [] tranformationIntEnArrayIntPropre(int nbAleatoire, int grandeurDuNb) {
 		String essai = String.valueOf(nbAleatoire);
 		int montableau[] = transformationStringEnArrayInt(essai, grandeurDuNb);
-		int monTableauFinal [] = new int [grandeurDuNb];
-		int i = montableau.length - grandeurDuNb;
+	/*	int monTableauFinal [] = new int [grandeurDuNb];
+		int i = grandeurDuNb - montableau.length;
 		int a = 0;
 		int length = montableau.length;
 		if (i != 0) 
@@ -60,11 +133,11 @@ public class Utile {
 			a++;
 			i++;
 			length--;
-		}
-		return monTableauFinal;
+		}*/
+		return montableau;
 	}
 
-	public boolean comparaisonPlusOuMoins(int nbAleatoire, String proposition, int grandeurDuNb, boolean victoire ) 
+	public boolean comparaisonPlusOuMoins(int nbAleatoire, String proposition, int grandeurDuNb, boolean victoire, int nbToursInitial, int nbTours, String type) 
 	{	
     	int propositionAdapt[] = transformationStringEnArrayInt(proposition, grandeurDuNb);
     	int nbAleatoireAdapt[] = tranformationIntEnArrayIntPropre(nbAleatoire, grandeurDuNb);
@@ -90,14 +163,12 @@ public class Utile {
 		if (nbDeEgal == grandeurDuNb)
 		{
 			victoire = true;
-			System.out.println("J'ai réussi à déchiffrer le message. Signé : l'ordinateur");
 		}
-		String str = Arrays.toString(reponse);
-		System.out.println(str);
+		String str = transformationArrayCharEnString(reponse);
+		phraseFinComparaison(nbToursInitial, nbTours, proposition, str, type);
 		return victoire;
 	}
-	
-	
+
 	public char[] comparaisonPlusOuMoinsDefenseur(int nbAleatoire, String proposition, int grandeurDuNb, boolean victoire ) 
 		{	
 	    	int propositionAdapt[] = transformationStringEnArrayInt(proposition, grandeurDuNb);
@@ -121,15 +192,13 @@ public class Utile {
 			}
 			return reponse;
 		}
-
-	
 	
 	public void issueDeLaPartie (boolean victoire, int nbAleatoire) {
 		if (victoire == true) {
-			System.out.println("Félicitations, vous avez réussi");
+			phraseIssueDeLaPartieGagnant();
 		}
 		else {
-			System.out.println("Vous avez échoué, la bonne réponse était" + nbAleatoire);
+			phraseIssueDeLaPartiePerdant(nbAleatoire);
 		}
 	}
 
@@ -160,29 +229,6 @@ public class Utile {
 		return nombre;
 	}
 
-	public String phraseDeDebut(int grandeurDuNb)
-	 {
-		   System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
-          scb = new Scanner(System.in);
-          String proposition = scb.nextLine();
-		 return proposition;
-	 }
-	
-	public String phraseDeDebutDefenseur (int grandeurDuNb)
-	{
-		 System.out.println("Quelle est votre solution ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
-         scb = new Scanner(System.in);
-         String reponse = scb.nextLine();
-		 return reponse;
-	}
-	
-	public String phraseErreurSaisie ()
-
-	{
-		String str = "Vous avez saisi le mauvais nombre de chiffre, ou avez inclus d'autres caractères que des chiffres, veuillez recommencer svp";
-		return str;
-	}
-
 	public String combinaisonChoisie(char [] reponse, int grandeurDuNb, String proposition)
 	{
 		String combinaison = "";
@@ -194,7 +240,7 @@ public class Utile {
 		}
 		else 
 		{
-			int tmp = 0;
+			//int tmp = 0;
 			int combinaisonArrayInt [] = new int [grandeurDuNb];
 			for (int i = 0; i < grandeurDuNb; i++)
 				{
@@ -204,27 +250,61 @@ public class Utile {
 					combinaisonArrayInt[i] = propositionArrayInt[i];
 					break;
 					case '+' :
-					tmp = 9 - propositionArrayInt[i];
-					tmp = tmp / 2 + 1;
-					combinaisonArrayInt[i] = propositionArrayInt[i] + tmp;
+				//	tmp = 9 - propositionArrayInt[i] + 3;
+				//	tmp = tmp / 2 + 1;
+					combinaisonArrayInt[i] = propositionArrayInt[i] + 1;
 					break;	
 					case '-' :
-					tmp = propositionArrayInt[i] / 2;
-					combinaisonArrayInt[i] = propositionArrayInt[i] - tmp;
+					//tmp = (propositionArrayInt[i]) - 2;
+					combinaisonArrayInt[i] = propositionArrayInt[i] - 1;
 					break;	
 					}
 					}
 			combinaison = transformationArrayIntEnString(combinaisonArrayInt);
 		}
-		System.out.println("La combinaison tentée est " + combinaison);
+		
 		return combinaison;
 	}
 	
-	public int genererNbAleatoire(int grandeurDuNb)
+	public int genererNbAleatoire()
 	{
 		double a = 10;
     	int nbAleatoire = ((int)( Math.random()*( (Math.pow(a, ((double)grandeurDuNb))))) + 1);
     	return nbAleatoire;
+	}
+
+	public String genererPremiereProposition (int grandeurDuNb)
+	{
+		int [] propositionArrayInt = new int[grandeurDuNb];
+		int i = 0;
+		while (grandeurDuNb > 0)
+		{
+			propositionArrayInt[i] = 5;
+			i++;
+			grandeurDuNb--;
+		}
+		String propositionString = transformationArrayIntEnString(propositionArrayInt);
+		return propositionString;
+	}
+	
+	public void phraseDeFinDuel(int grandeurDuNb, int nbAleatoire, boolean victoire, boolean victoireOrdi)
+	{
+		if (victoire && victoireOrdi)
+		{
+			System.out.println("Match nul entre l'ordinateur et vous, vous avez trouvés la solution au même tour.");
+		}
+		else if (victoire)
+		{
+			System.out.println("Félicitation, vous avez remporté le duel.");
+		}
+		else if (victoireOrdi)
+		{
+			System.out.println("Vous avez perdu contre l'ordinateur. La solution était " + nbAleatoire);
+		}
+		else
+		{
+			System.out.println("Ni vous, ni l'ordinateur n'avez trouvé la réponse adverse.");
+		}
 	}
 }
 

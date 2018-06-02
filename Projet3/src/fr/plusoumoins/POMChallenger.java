@@ -1,25 +1,29 @@
 package fr.plusoumoins;
 
+
+
 public class POMChallenger {
-	    public void init(int nbTours, int grandeurDuNb) {
+	    public void init) {
 	    	Utile utile = new Utile();
-	    	int nbAleatoire = utile.genererNbAleatoire(grandeurDuNb);
-	    	System.out.println(nbAleatoire);
+	    	int nbAleatoire = utile.genererNbAleatoire();
 	        boolean victoire = false;
 	        boolean verificationNb = true;
+	        int nbToursInitial = nbTours;
+	        String type = "null";
 	        while (nbTours > 0 && victoire == false)
 	        {
-	                String proposition = utile.phraseDeDebut(grandeurDuNb);
-	                verificationNb = utile.verificationNb(proposition, grandeurDuNb);
+	                String proposition = utile.phraseDeDebut();
+	                verificationNb = utile.verificationNb(proposition);
 	                if (verificationNb == true && victoire == false)
 	               	{
-	                		victoire = utile.comparaisonPlusOuMoins(nbAleatoire, proposition, grandeurDuNb, victoire);
+	                		victoire = utile.comparaisonPlusOuMoins(nbAleatoire, proposition, victoire, nbToursInitial, type);
 	                		nbTours--;	                
 	                }
 	                else 
 	                {
-	                	System.out.println(utile.phraseErreurSaisie());
+	                	utile.phraseErreurSaisie();
 	                }    
+
 	        }
 	        utile.issueDeLaPartie(victoire, nbAleatoire);
 	}
