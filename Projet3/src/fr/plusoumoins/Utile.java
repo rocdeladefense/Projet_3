@@ -1,25 +1,27 @@
 package fr.plusoumoins;
 
+import fr.PropertiesFile;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Utile {
 
 	private Scanner scb;
-	
+	private PropertiesFile p;
+
 
 	public Utile() {
 		super();
-		p = Properties.getInstance();
+		p = PropertiesFile.getInstance();
 	}
 
-	public int[] transformationStringEnArrayInt (String proposition, int grandeurDuNb){
-		int[] montableau = new int[grandeurDuNb];
+	public int[] transformationStringEnArrayInt (String proposition){
+		int[] montableau = new int[p.getGrandeurDuNb()];
 		int difference = 0;
 		int j = 0;
-		if (proposition.length() < grandeurDuNb)
+		if (proposition.length() < p.getGrandeurDuNb())
 		{
-			difference = grandeurDuNb - proposition.length();
+			difference = p.getGrandeurDuNb()- proposition.length();
 		}
 		while (difference > 0)
 		{
@@ -27,10 +29,6 @@ public class Utile {
 			j++;
 			difference--;
 		}
-		
-		//String chaine = ("00000000000000000000000".concat(proposition));
-		//chaine = chaine.substring(chaine.length() - grandeurDuNb);
-		//System.out
 		int i = 0;
 		for (i=0; i < proposition.length(); i++, j++){
 		  montableau[j]=Integer.parseInt(""+proposition.charAt(i));
@@ -62,17 +60,17 @@ public class Utile {
 		return combinaison;
 	}
 	
-	public String phraseDeDebut(int grandeurDuNb)
+	public String phraseDeDebut()
 	 {
-		   System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
+		   System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + p.getGrandeurDuNb() + " chiffres)");
          scb = new Scanner(System.in);
          String proposition = scb.nextLine();
 		 return proposition;
 	 }
 	
-	public String phraseDeDebutDefenseur (int grandeurDuNb)
+	public String phraseDeDebutDefenseur ()
 	{
-		 System.out.println("Quelle est votre solution ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
+		 System.out.println("Quelle est votre solution ? (Entrez un nombre à " + p.getGrandeurDuNb() + " chiffres)");
          scb = new Scanner(System.in);
          String reponse = scb.nextLine();
 		 return reponse;
@@ -111,41 +109,21 @@ public class Utile {
 		}
 	}
 	
-	public int [] tranformationIntEnArrayIntPropre(int nbAleatoire, int grandeurDuNb) {
+	public int [] tranformationIntEnArrayIntPropre(int nbAleatoire) {
 		String essai = String.valueOf(nbAleatoire);
-		int montableau[] = transformationStringEnArrayInt(essai, grandeurDuNb);
-	/*	int monTableauFinal [] = new int [grandeurDuNb];
-		int i = grandeurDuNb - montableau.length;
-		int a = 0;
-		int length = montableau.length;
-		if (i != 0) 
-		{
-			while (i != 0)
-			{
-				monTableauFinal[a] = 0;
-				i--;
-				a++;
-			}
-		}
-		while (length != 0)
-		{
-			monTableauFinal[a] = montableau[i];
-			a++;
-			i++;
-			length--;
-		}*/
+		int montableau[] = transformationStringEnArrayInt(essai);
 		return montableau;
 	}
 
-	public boolean comparaisonPlusOuMoins(int nbAleatoire, String proposition, int grandeurDuNb, boolean victoire, int nbToursInitial, int nbTours, String type) 
+	public boolean comparaisonPlusOuMoins(int nbAleatoire, int nbTours, String proposition, boolean victoire, int nbToursInitial, String type) 
 	{	
-    	int propositionAdapt[] = transformationStringEnArrayInt(proposition, grandeurDuNb);
-    	int nbAleatoireAdapt[] = tranformationIntEnArrayIntPropre(nbAleatoire, grandeurDuNb);
-		char reponse [] = new char[grandeurDuNb];
+    	int propositionAdapt[] = transformationStringEnArrayInt(proposition);
+    	int nbAleatoireAdapt[] = tranformationIntEnArrayIntPropre(nbAleatoire);
+		char reponse [] = new char[p.getGrandeurDuNb()];
 		int nbDeEgal = 0;
 		victoire = false;
 
-		for(int i = 0; i < grandeurDuNb; i++)
+		for(int i = 0; i < p.getGrandeurDuNb(); i++)
 		{
 			if(nbAleatoireAdapt[i] > propositionAdapt[i])
 			{
@@ -160,7 +138,7 @@ public class Utile {
 				nbDeEgal++;
 			}
 		}
-		if (nbDeEgal == grandeurDuNb)
+		if (nbDeEgal == p.getGrandeurDuNb())
 		{
 			victoire = true;
 		}
@@ -169,14 +147,14 @@ public class Utile {
 		return victoire;
 	}
 
-	public char[] comparaisonPlusOuMoinsDefenseur(int nbAleatoire, String proposition, int grandeurDuNb, boolean victoire ) 
+	public char[] comparaisonPlusOuMoinsDefenseur(int nbAleatoire, String proposition, boolean victoire ) 
 		{	
-	    	int propositionAdapt[] = transformationStringEnArrayInt(proposition, grandeurDuNb);
-	    	int nbAleatoireAdapt[] = tranformationIntEnArrayIntPropre(nbAleatoire, grandeurDuNb);
-			char reponse [] = new char[grandeurDuNb]; 
+	    	int propositionAdapt[] = transformationStringEnArrayInt(proposition);
+	    	int nbAleatoireAdapt[] = tranformationIntEnArrayIntPropre(nbAleatoire);
+			char reponse [] = new char[p.getGrandeurDuNb()]; 
 			victoire = false;
 		
-			for(int i = 0; i < grandeurDuNb; i++)
+			for(int i = 0; i < p.getGrandeurDuNb(); i++)
 			{
 				if(nbAleatoireAdapt[i] > propositionAdapt[i])
 				{
@@ -202,17 +180,17 @@ public class Utile {
 		}
 	}
 
-	public boolean verificationNb(String proposition, int grandeurDuNb) {
+	public boolean verificationNb(String proposition) {
 		boolean nombre = true;
 		int i = 0;
 		char[] propositionArray = proposition.toCharArray();
-		if (grandeurDuNb != proposition.length())
+		if (p.getGrandeurDuNb() != proposition.length())
 		{
 			nombre = false;
 		}
 		else
 		{
-			while (i != grandeurDuNb && nombre == true)
+			while (i != p.getGrandeurDuNb() && nombre == true)
 			{
 				int tmp = (int) propositionArray[i];
 				if (tmp < 48 || tmp > 57) 
@@ -229,20 +207,20 @@ public class Utile {
 		return nombre;
 	}
 
-	public String combinaisonChoisie(char [] reponse, int grandeurDuNb, String proposition)
+	public String combinaisonChoisie(char [] reponse, String proposition)
 	{
 		String combinaison = "";
-		int [] propositionArrayInt = transformationStringEnArrayInt(proposition, grandeurDuNb);
+		int [] propositionArrayInt = transformationStringEnArrayInt(proposition);
 		if (reponse[0] != '=' && reponse[0] != '+' && reponse[0] != '-')
 		{
-			int combinaisonInt = genererNbAleatoire(grandeurDuNb);
+			int combinaisonInt = genererNbAleatoire();
 			combinaison = transformationIntEnString(combinaisonInt);
 		}
 		else 
 		{
 			//int tmp = 0;
-			int combinaisonArrayInt [] = new int [grandeurDuNb];
-			for (int i = 0; i < grandeurDuNb; i++)
+			int combinaisonArrayInt [] = new int [p.getGrandeurDuNb()];
+			for (int i = 0; i < p.getGrandeurDuNb(); i++)
 				{
 					switch (reponse[i])
 					{
@@ -269,14 +247,16 @@ public class Utile {
 	public int genererNbAleatoire()
 	{
 		double a = 10;
+		int grandeurDuNb = p.getGrandeurDuNb();
     	int nbAleatoire = ((int)( Math.random()*( (Math.pow(a, ((double)grandeurDuNb))))) + 1);
     	return nbAleatoire;
 	}
 
-	public String genererPremiereProposition (int grandeurDuNb)
+	public String genererPremiereProposition ()
 	{
-		int [] propositionArrayInt = new int[grandeurDuNb];
+		int [] propositionArrayInt = new int[p.getGrandeurDuNb()];
 		int i = 0;
+		int grandeurDuNb = p.getGrandeurDuNb();
 		while (grandeurDuNb > 0)
 		{
 			propositionArrayInt[i] = 5;
@@ -287,8 +267,11 @@ public class Utile {
 		return propositionString;
 	}
 	
-	public void phraseDeFinDuel(int grandeurDuNb, int nbAleatoire, boolean victoire, boolean victoireOrdi)
+	public void phraseDeFinDuel(int nbAleatoire, boolean victoire, boolean victoireOrdi)
 	{
+		String nbAleatoireString = transformationIntEnString(nbAleatoire);
+		int [] nbAleatoireArrayInt = transformationStringEnArrayInt(nbAleatoireString);
+		nbAleatoireString = transformationArrayIntEnString(nbAleatoireArrayInt);
 		if (victoire && victoireOrdi)
 		{
 			System.out.println("Match nul entre l'ordinateur et vous, vous avez trouvés la solution au même tour.");
@@ -299,12 +282,23 @@ public class Utile {
 		}
 		else if (victoireOrdi)
 		{
-			System.out.println("Vous avez perdu contre l'ordinateur. La solution était " + nbAleatoire);
+			System.out.println("Vous avez perdu contre l'ordinateur. La solution était " + nbAleatoireString);
 		}
 		else
 		{
 			System.out.println("Ni vous, ni l'ordinateur n'avez trouvé la réponse adverse.");
 		}
 	}
+	
+	  public void modeDeveloppeur(int nbAleatoire)
+	    {
+	    	if (p.getModeDev() == 99)
+	    	{
+	    		String solution = transformationIntEnString(nbAleatoire);
+	    		int [] solutionArrayInt = transformationStringEnArrayInt(solution);
+	    		solution = transformationArrayIntEnString(solutionArrayInt);
+	    		System.out.println("Mode Developpeur activé, la solution est " + solution);
+	    	}
+	    }
 }
 

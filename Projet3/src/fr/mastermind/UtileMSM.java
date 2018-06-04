@@ -1,10 +1,16 @@
 package fr.mastermind;
+import fr.PropertiesFile;
 
 import java.util.Arrays;
 import java.util.Scanner;
 
+
 public class UtileMSM {
-		
+	private PropertiesFile p;
+	public UtileMSM() {
+		super();
+		p = PropertiesFile.getInstance();
+	}
 	private Scanner scb;
 
 	public void phraseErreurSaisie()
@@ -12,19 +18,28 @@ public class UtileMSM {
 		System.out.println("Vous avez saisi le mauvais nombre de chiffre, ou avez inclus d'autres caractères que des chiffres, veuillez recommencer svp");
 	}
 	
-	public void phraseDeFinCas1(int [] reponse, String proposition, int nbToursAAfficher)
+	public void phraseDeFinCas1(int [] reponse, String proposition, int nbToursAAfficher, String type)
 	{
-		System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s) et " + reponse[1] + " présent(s)");
-
+		if (type == "HUMAIN")
+		{
+			System.out.println("Tour Humain " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s) et " + reponse[1] + " présent(s)");
+		}
+		else if (type == "ORDI") {
+			System.out.println("Tour Ordinateur " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s) et " + reponse[1] + " présent(s)");
+		}
+		else
+		{
+			System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s) et " + reponse[1] + " présent(s)");
+		}
 	}
 		
-	public int[] transformationStringEnArrayInt (String proposition, int grandeurDuNb){
-		int[] montableau = new int[grandeurDuNb];
+	public int[] transformationStringEnArrayInt (String proposition){
+		int[] montableau = new int[p.getGrandeurDuNb()];
 		int difference = 0;
 		int j = 0;
-		if (proposition.length() < grandeurDuNb)
+		if (proposition.length() < p.getGrandeurDuNb())
 		{
-			difference = grandeurDuNb - proposition.length();
+			difference = p.getGrandeurDuNb() - proposition.length();
 		}
 		while (difference > 0)
 		{
@@ -51,11 +66,11 @@ public class UtileMSM {
 			return i;
 		}
 		
-		public int [] tranformationIntEnArrayIntPropre(int nbAleatoire, int grandeurDuNb) {
+		public int [] tranformationIntEnArrayIntPropre(int nbAleatoire) {
 			String essai = String.valueOf(nbAleatoire);
-			int montableau[] = transformationStringEnArrayInt(essai, grandeurDuNb);
-			int monTableauFinal [] = new int [grandeurDuNb];
-			int i = montableau.length - grandeurDuNb;
+			int montableau[] = transformationStringEnArrayInt(essai);
+			int monTableauFinal [] = new int [p.getGrandeurDuNb()];
+			int i = montableau.length - p.getGrandeurDuNb();
 			int a = 0;
 			int length = montableau.length;
 			if (i != 0) 
@@ -77,15 +92,15 @@ public class UtileMSM {
 			return monTableauFinal;
 		}
 		
-		public boolean comparaisonMastermind(int nbAleatoire[], String proposition, int grandeurDuNb, boolean victoire, int nbTours, int nbToursInitial) 
+		public boolean comparaisonMastermind(int nbAleatoire[], String proposition, boolean victoire, int nbTours, int nbToursInitial, String type) 
 		{	
-			int propositionAdapt[] = transformationStringEnArrayInt(proposition, grandeurDuNb);
+			int propositionAdapt[] = transformationStringEnArrayInt(proposition);
 			int reponse [] = new int[2]; 
-			boolean present [] = new boolean [grandeurDuNb];
-			boolean bienPlace [] = new boolean [grandeurDuNb];
-			boolean presentDansNbAleatoire [] = new boolean[grandeurDuNb];
+			boolean present [] = new boolean [p.getGrandeurDuNb()];
+			boolean bienPlace [] = new boolean [p.getGrandeurDuNb()];
+			boolean presentDansNbAleatoire [] = new boolean[p.getGrandeurDuNb()];
 			int nbDeBienPlace = 0;
-			for (int i = 0; i != grandeurDuNb; i++)
+			for (int i = 0; i != p.getGrandeurDuNb(); i++)
 			{
 				if (propositionAdapt[i] == nbAleatoire[i])
 				{
@@ -94,9 +109,9 @@ public class UtileMSM {
 					nbDeBienPlace++;
 				}
 			}
-			for (int i = 0; i != grandeurDuNb; i++)
+			for (int i = 0; i != p.getGrandeurDuNb(); i++)
 			{
-				for(int j = 0; j != grandeurDuNb; j++)
+				for(int j = 0; j != p.getGrandeurDuNb(); j++)
 				{
 					if (propositionAdapt[i] == nbAleatoire[j] && bienPlace[i] == false && bienPlace[j] == false && present[i] == false && presentDansNbAleatoire[j] == false)
 					{
@@ -106,38 +121,36 @@ public class UtileMSM {
 					}
 				}
 			}
-			if (nbDeBienPlace == grandeurDuNb)
+			if (nbDeBienPlace == p.getGrandeurDuNb())
 			{
 				victoire = true;
-				phraseDeFinMSM(reponse, proposition, nbTours, nbToursInitial);
+				phraseDeFinMSM(reponse, proposition, nbTours, nbToursInitial, type);
 			}
 			else {
-				phraseDeFinMSM(reponse, proposition, nbTours, nbToursInitial);
+				phraseDeFinMSM(reponse, proposition, nbTours, nbToursInitial, type);
 			}
 			return victoire;
 		}
 		
-		public int [] comparaisonMastermindDefenseur(String solution, int propositionAdapt [], int grandeurDuNb)
+		public int [] comparaisonMastermindDefenseur(String solution, int propositionAdapt [])
 		{
-			int solutionAdapt[] = transformationStringEnArrayInt(solution, grandeurDuNb);
+			int solutionAdapt[] = transformationStringEnArrayInt(solution);
 	    	//int propositionAdapt[] = transformationStringEnArrayInt(proposition, grandeurDuNb);
 			int reponse [] = new int[2]; 
-			boolean present [] = new boolean [grandeurDuNb];
-			boolean bienPlace [] = new boolean [grandeurDuNb];
-			boolean presentDansSolution [] = new boolean[grandeurDuNb];
-			int nbDeBienPlace = 0;
-			for (int i = 0; i != grandeurDuNb; i++)
+			boolean present [] = new boolean [p.getGrandeurDuNb()];
+			boolean bienPlace [] = new boolean [p.getGrandeurDuNb()];
+			boolean presentDansSolution [] = new boolean[p.getGrandeurDuNb()];
+			for (int i = 0; i != p.getGrandeurDuNb(); i++)
 			{
 				if (solutionAdapt[i] == propositionAdapt[i])
 				{
 					bienPlace[i] = true;
 					reponse[0] = reponse[0] + 1;
-					nbDeBienPlace++;
 				}
 			}
-			for (int i = 0; i != grandeurDuNb; i++)
+			for (int i = 0; i != p.getGrandeurDuNb(); i++)
 			{
-				for(int j = 0; j != grandeurDuNb; j++)
+				for(int j = 0; j != p.getGrandeurDuNb(); j++)
 				{
 					if (solutionAdapt[i] == propositionAdapt[j] && bienPlace[i] == false && bienPlace[j] == false && present[i] == false && presentDansSolution[j] == false)
 					{
@@ -150,20 +163,49 @@ public class UtileMSM {
 			return reponse;
 		}
 		
-
-		public void phraseDeFinCas2(int [] reponse, String proposition, int nbToursAAfficher)
+		public void phraseDeFinCas2(int [] reponse, String proposition, int nbToursAAfficher, String type)
 		{
-			System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[1] + " présent(s)");
-		}
+			if (type == "HUMAIN")
+			{
+				System.out.println("Tour Humain " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[1] + " présent(s)");
+			}
+			else if (type == "ORDI") {
+				System.out.println("Tour Ordinateur " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[1] + " présent(s)");
+			}
+			else
+			{
+				System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[1] + " présent(s)");
+			}
+			}
 		
-		public void phraseDeFinCas3(int [] reponse, String proposition, int nbToursAAfficher)
+		public void phraseDeFinCas3(int [] reponse, String proposition, int nbToursAAfficher, String type)
+		{
+			if (type == "HUMAIN")
+		{
+				System.out.println("Tour Humain " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s)");
+		}
+		else if (type == "ORDI") {
+			System.out.println("Tour Ordinateur " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s)");
+		}
+		else
 		{
 			System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + reponse[0] + " bien placé(s)");
 		}
+		}
 		
-		public void phraseDeFinCas4(int [] reponse, String proposition, int nbToursAAfficher)
+		public void phraseDeFinCas4(int [] reponse, String proposition, int nbToursAAfficher, String type)
 		{
-			System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : Aucun présent ni bien placé");
+			if (type == "HUMAIN")
+			{
+				System.out.println("Tour Humain " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : Aucun présent ni bien placé");
+			}
+			else if (type == "ORDI") {
+				System.out.println("Tour Ordinateur " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : Aucun présent ni bien placé");
+			}
+			else
+			{
+				System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : Aucun présent ni bien placé");
+			}
 		}
 		
 		public void phraseIssueDeLaPartieGagnant()
@@ -171,10 +213,10 @@ public class UtileMSM {
 			System.out.println("Félicitations, vous avez réussi");
 		}
 		
-		public String phraseDeDebutDefenseur (int grandeurDuNb, int nbChiffres)
+		public String phraseDeDebutDefenseur ()
 		{
-			int intervalleNb = nbChiffres - 1;
-			 System.out.println("Quelle est votre solution ? (Entrez un nombre à " + grandeurDuNb + " chiffres, chaque chiffre doit être compris entre 0 et " + intervalleNb + ")");
+			int intervalleNb = p.getNbChiffres() - 1;
+			 System.out.println("Quelle est votre solution ? (Entrez un nombre à " + p.getGrandeurDuNb() + " chiffres, chaque chiffre doit être compris entre 0 et " + intervalleNb + ")");
 	         scb = new Scanner(System.in);
 	         String reponse = scb.nextLine();
 			 return reponse;
@@ -185,23 +227,23 @@ public class UtileMSM {
 			System.out.println("Vous avez échoué, la bonne réponse était " + nbAleatoire);
 		}
 		
-		public void phraseDeFinMSM (int [] reponse, String proposition, int nbTours, int nbToursInitial) {
+		public void phraseDeFinMSM (int [] reponse, String proposition, int nbTours, int nbToursInitial, String type) {
 			int nbToursAAfficher = nbToursInitial - nbTours + 1;
 			if (reponse[0] != 0 && reponse[1] != 0)
 			{
-				phraseDeFinCas1(reponse, proposition,nbToursAAfficher);
+				phraseDeFinCas1(reponse, proposition,nbToursAAfficher, type);
 			}
 			else if (reponse[0] == 0 && reponse[1] != 0)
 			{
-				phraseDeFinCas2(reponse, proposition,nbToursAAfficher);
+				phraseDeFinCas2(reponse, proposition,nbToursAAfficher, type);
 			}
 			else if(reponse[0] != 0 && reponse[1] == 0)
 			{
-				phraseDeFinCas3(reponse, proposition,nbToursAAfficher);
+				phraseDeFinCas3(reponse, proposition,nbToursAAfficher, type);
 			}
 			else
 			{
-				phraseDeFinCas4(reponse, proposition,nbToursAAfficher);
+				phraseDeFinCas4(reponse, proposition,nbToursAAfficher, type);
 			}
 		}
 		
@@ -216,17 +258,17 @@ public class UtileMSM {
 			}
 		}
 
-		public boolean verificationNb(String proposition, int grandeurDuNb, int intervalleNb) {
+		public boolean verificationNb(String proposition) {
 			boolean nombre = true;
 			int i = 0;
 			char[] propositionArray = proposition.toCharArray();
-			if (grandeurDuNb != proposition.length())
+			if (p.getGrandeurDuNb() != proposition.length())
 			{
 				nombre = false;
 			}
 			else
 			{
-				while (i != grandeurDuNb && nombre == true)
+				while (i != p.getGrandeurDuNb() && nombre == true)
 				{
 					int tmp = (int) propositionArray[i];
 					if (tmp < 48 || tmp > 57) 
@@ -243,22 +285,22 @@ public class UtileMSM {
 			return nombre;
 		}
 
-		public String phraseDeDebut(int grandeurDuNb)
+		public String phraseDeDebut()
 		 {
-			   System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + grandeurDuNb + " chiffres)");
+			   System.out.println("Quelle est votre proposition ? (Entrez un nombre à " + p.getGrandeurDuNb() + " chiffres)");
                scb = new Scanner(System.in);
                String proposition = scb.nextLine();
 			 return proposition;
 		 }
 	
-		public int[] genererNbAleatoireMSM(int grandeurDuNb, int nbChiffres)
+		public int[] genererNbAleatoireMSM()
 		{
-			int [] nbAleatoire = new int [grandeurDuNb];
+			int [] nbAleatoire = new int [p.getGrandeurDuNb()];
 	    	int i = 0;
-	    	while (i != grandeurDuNb)
+	    	while (i != p.getGrandeurDuNb())
 	    	{
 	    		nbAleatoire[i] = ((int)( Math.random()* 10));
-	    		if (nbAleatoire[i] < nbChiffres)
+	    		if (nbAleatoire[i] < p.getNbChiffres())
 	    		{
 	    			i++;
 	    		}
@@ -266,33 +308,32 @@ public class UtileMSM {
 	    	return nbAleatoire;
 		}
 	
-		public boolean verificationEtape1(int i, int grandeurDuNb)
+		public boolean verificationEtape1(int i)
 		{
 			boolean verification = false;
-			if (i == grandeurDuNb)
+			if (i == p.getGrandeurDuNb())
 			{
 				verification = true;
 			}
 			return verification;
 		}
 		
-		public int [] combinaisonChoisieEtape1(int grandeurDuNb, int nbChiffres, int nbTours, int nbToursInitial)
+		public int [] combinaisonChoisieEtape1(int nbTours, int nbToursInitial)
 		{
-			int proposition [] = new int [grandeurDuNb];
-			int j = (nbChiffres - 1 - (nbToursInitial - nbTours));
-			for(int i = 0; i < grandeurDuNb && j > 0; i++)
+			int proposition [] = new int [p.getGrandeurDuNb()];
+			int j = (p.getNbChiffres() - 1 - (nbToursInitial - nbTours));
+			for(int i = 0; i < p.getGrandeurDuNb() && j > 0; i++)
 			{
 				proposition[i] = j;
 			}
-			nbChiffres--;
 			return proposition;
 		}
 			
-		public int [][] combinaisonChoisieEtape2(int grandeurDuNb, int [][] combinaison, int nbChiffres,int [] reponse, int [] reponseInitiale, int chiffreTeste, int [] premierChiffreATester)
+		public int [][] combinaisonChoisieEtape2(int [][] combinaison,int [] reponse, int [] reponseInitiale, int chiffreTeste, int [] premierChiffreATester)
 		{
-			if (combinaison[2][0] == grandeurDuNb)
+			if (combinaison[2][0] == p.getGrandeurDuNb())
 			{
-				combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0], grandeurDuNb);
+				combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0]);
 				return combinaison;
 			}
 			int k = getArrayIndex(combinaison[0], premierChiffreATester[0]);
@@ -307,20 +348,20 @@ public class UtileMSM {
 				}
 				combinaison[3][m] = 99;
 				combinaison[2][0] = combinaison[2][0]+1;
-				if (combinaison[2][0] == grandeurDuNb)
+				if (combinaison[2][0] == p.getGrandeurDuNb())
 				{
-					combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0], grandeurDuNb);
+					combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0]);
 					return combinaison;
 				}
 				combinaison[0][k] = premierChiffreATester[0];
 				k = 0;
 				k = trouverEmplacementVide(combinaison[1], 0);
-				int z = trouverProchainChiffreATester(combinaison[3], grandeurDuNb);
-				if (k == grandeurDuNb || z == grandeurDuNb)
+				int z = trouverProchainChiffreATester(combinaison[3]);
+				if (k == p.getGrandeurDuNb() || z == p.getGrandeurDuNb())
 				{
 				
-					combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0], grandeurDuNb);
-					combinaison[2][0] = grandeurDuNb;
+					combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0]);
+					combinaison[2][0] = p.getGrandeurDuNb();
 					return combinaison;
 				}
 				combinaison[0][k] = combinaison[3][z];
@@ -329,7 +370,7 @@ public class UtileMSM {
 			{
 				combinaison[1][k] = premierChiffreATester[0];
 				combinaison[2][0] = combinaison[2][0]+1;
-				m = trouverIndexChiffreDifferent(premierChiffreATester[0], grandeurDuNb, combinaison[0]);
+				m = trouverIndexChiffreDifferent(premierChiffreATester[0], combinaison[0]);
 				tmp = combinaison[0][m];
 				combinaison[0][m] = premierChiffreATester[0];
 				m++;
@@ -338,12 +379,12 @@ public class UtileMSM {
 			}
 			else
 			{
-				m = trouverIndexChiffreDifferent(premierChiffreATester[0], grandeurDuNb, combinaison[0]);
-				if (m == grandeurDuNb)
+				m = trouverIndexChiffreDifferent(premierChiffreATester[0], combinaison[0]);
+				if (m == p.getGrandeurDuNb())
 				{
 					k = 0;
 					k = trouverEmplacementVide(combinaison[1], 0);
-					int z =	trouverProchainChiffreATester(combinaison[3], grandeurDuNb);
+					int z =	trouverProchainChiffreATester(combinaison[3]);
 					combinaison[0][k] = combinaison[3][z];
 				}
 				else 
@@ -361,9 +402,9 @@ public class UtileMSM {
 		}
 
 	
-		public int [] premiereCombinaisonEtape2 (int combinaison[], int grandeurDuNb, int premierChiffreATester)
+		public int [] premiereCombinaisonEtape2 (int combinaison[], int premierChiffreATester)
 		{
-			for(int i=0;i<grandeurDuNb;i++)
+			for(int i=0;i<p.getGrandeurDuNb();i++)
 			{
 				combinaison[i] = premierChiffreATester;
 			}
@@ -383,10 +424,10 @@ public class UtileMSM {
 	    return k;
 		}
 	    
-	    public int trouverProchainChiffreATester(int [] combinaison3, int grandeurDuNb)
+	    public int trouverProchainChiffreATester(int [] combinaison3)
 	    {
 	    	int i = 0;
-	    	while (i < grandeurDuNb)
+	    	while (i < p.getGrandeurDuNb())
 	    	{
 	    		if (combinaison3[i] != 99) {
 	    			return i;
@@ -396,10 +437,11 @@ public class UtileMSM {
 
 	    	return i;
 	    }
-	    public int trouverIndexChiffreDifferent(int premierChiffreATester, int grandeurDuNb, int []combinaison)
+
+	    public int trouverIndexChiffreDifferent(int premierChiffreATester, int []combinaison)
 	    {
 	    	int i = 0;
-	    	while (i < grandeurDuNb && (combinaison[i] == premierChiffreATester))
+	    	while (i < p.getGrandeurDuNb() && (combinaison[i] == premierChiffreATester))
 	    	{
 	    			i++;
 	    	}
@@ -414,10 +456,11 @@ public class UtileMSM {
 	    	}
 	    	return i;
 	    }
-	    public int [] remplirCombinaison1(int [] combinaison1, int grandeurDuNb)
+	   
+	    public int [] remplirCombinaison1(int [] combinaison1)
 	    {
 	    	int i = 0;
-	    	while (i < grandeurDuNb)
+	    	while (i < p.getGrandeurDuNb())
 	    	{
 	    		combinaison1[i] = 99;
 	    		i++;
@@ -425,10 +468,10 @@ public class UtileMSM {
 	    	return combinaison1;
 	    }
 	    
-	    public int [] finirDeRemplirCombinaison(int [][]combinaison, int premierChiffreATester, int grandeurDuNb)
+	    public int [] finirDeRemplirCombinaison(int [][]combinaison, int premierChiffreATester)
 	    {
 	    	int i = 0;
-	    	while (i < grandeurDuNb)
+	    	while (i < p.getGrandeurDuNb())
 	    	{
 	    		if (combinaison[1][i] == 99)
 	    		{
@@ -438,12 +481,50 @@ public class UtileMSM {
 	    	}
 	    	return combinaison[1];
 	    }
-	    public boolean victoireMastermindDefenseur(int [] []combinaison, boolean victoire, int grandeurDuNb, int nbTours, int nbTourInitial)
+	   
+	    public boolean victoireMastermindDefenseur(int [] []combinaison, boolean victoire, int nbTours, int nbTourInitial, String type)
 	    {
-	    	int nbTourAAfficher = nbTourInitial - nbTours + 1;
+	    	int nbToursAAfficher = nbTourInitial - nbTours + 1;
 	    	victoire = true;
 	    	String proposition = transformationArrayIntEnString(combinaison[0]);
-			System.out.println("Tour " + nbTourAAfficher + " : Proposition : " + proposition +" -> Réponse : " + grandeurDuNb + " bien placés");
+			if (type == "ORDI") {
+				System.out.println("Tour Ordinateur " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + p.getGrandeurDuNb() + " bien placé(s)");
+			}
+			else
+			{
+				System.out.println("Tour " + nbToursAAfficher + " : Proposition : " + proposition + " -> Réponse : " + p.getGrandeurDuNb() + " bien placé(s)");
+			}
 	    	return victoire;
 	    }
-	}
+	    
+	    public void phraseDeFinMSMDuel(int nbAleatoire[], boolean victoireHumain, boolean victoireOrdi)
+		{
+
+			String nbAleatoireString = transformationArrayIntEnString(nbAleatoire);
+			if (victoireHumain && victoireOrdi)
+			{
+				System.out.println("Match nul entre l'ordinateur et vous, vous avez trouvés la solution au même tour.");
+			}
+			else if (victoireHumain)
+			{
+				System.out.println("Félicitation, vous avez remporté le duel.");
+			}
+			else if (victoireOrdi)
+			{
+				System.out.println("Vous avez perdu contre l'ordinateur. La solution était " + nbAleatoireString);
+			}
+			else
+			{
+				System.out.println("Ni vous, ni l'ordinateur n'avez trouvé la réponse adverse.");
+			}
+		}
+	
+	    public void modeDeveloppeur(int[] nbAleatoire)
+	    {
+	    	if (p.getModeDev() == 99)
+	    	{
+	    		String solution = transformationArrayIntEnString(nbAleatoire);
+	    		System.out.println("Mode Developpeur activé, la solution est " + solution);
+	    	}
+	    }
+}

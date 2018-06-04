@@ -1,28 +1,34 @@
 package fr.mastermind;
-
-import fr.plusoumoins.Utile;
+import fr.PropertiesFile;
 
 public class MSMDefenseur {
-	private int grandeurDuNb;
-	public void init (int nbTours, int grandeurDuNb, int nbChiffres)
+	private PropertiesFile p;
+
+	public MSMDefenseur() {
+		super();
+		p = PropertiesFile.getInstance();
+	}
+
+	public void init ()
 	{
-		this.grandeurDuNb = grandeurDuNb;
 		UtileMSM utile = new UtileMSM();
     	boolean verification = false;
     	boolean victoire = false;
     	boolean etape1 = false;
     	boolean etape2 = false;
+    	String type = "null";
     	String solution = "";
-    	int proposition [] = new int [grandeurDuNb];
-    	int chiffresTrouves[] = new int [grandeurDuNb];
+    	int nbTours = p.getNbTours();
+    	int proposition [] = new int [p.getGrandeurDuNb()];
+    	int chiffresTrouves[] = new int [p.getGrandeurDuNb()];
         int nbToursInitial = nbTours;
         int reponse [] = new int [2];
         int reponseInitiale[] = new int [2];
         int solutionAdapt [] ;
     	while (verification == false)
     	{
-    		solution = utile.phraseDeDebutDefenseur(grandeurDuNb, nbChiffres);
-    		verification = utile.verificationNb(solution, grandeurDuNb, nbChiffres);
+    		solution = utile.phraseDeDebutDefenseur();		//ici l'utilisateur choisit la solution
+    		verification = utile.verificationNb(solution);
     		if(verification == false)
     		{
     			utile.phraseErreurSaisie();
@@ -30,39 +36,39 @@ public class MSMDefenseur {
     	}
     	int i = 0;
     	int premierChiffreATester [] = {0, 0};
-		solutionAdapt = utile.transformationStringEnArrayInt(solution, grandeurDuNb);
+		solutionAdapt = utile.transformationStringEnArrayInt(solution);
     	while (etape1 == false && nbTours > 0 && victoire == false)
     	{
-    		proposition = utile.combinaisonChoisieEtape1(grandeurDuNb, nbChiffres, nbTours, nbToursInitial);
+    		proposition = utile.combinaisonChoisieEtape1(nbTours, nbToursInitial);
     		String propositionAdapt = utile.transformationArrayIntEnString(proposition);
-    		victoire = utile.comparaisonMastermind(solutionAdapt, propositionAdapt, grandeurDuNb, victoire, nbTours, nbToursInitial);
-    		reponse = utile.comparaisonMastermindDefenseur(solution, proposition, grandeurDuNb);
+    		victoire = utile.comparaisonMastermind(solutionAdapt, propositionAdapt, victoire, nbTours, nbToursInitial, type);
+    		reponse = utile.comparaisonMastermindDefenseur(solution, proposition);
     		if (reponse[0] > premierChiffreATester[1])
     		{
-    			premierChiffreATester[0] =  (nbChiffres - 1 - (nbToursInitial - nbTours));
+    			premierChiffreATester[0] =  (p.getNbChiffres() - 1 - (nbToursInitial - nbTours));
     			premierChiffreATester[1] = reponse[0];
-    		}
+    		}						//dans cette grosse boucle, l'ordi teste chaque chiffre indépendament jusqu'à trouver tous les chiffres (pas placés) qui se trouvent dans la solution
     		while (reponse[0] >= 1)
     		{
-    			chiffresTrouves[i] = (nbChiffres - 1 - (nbToursInitial - nbTours));
+    			chiffresTrouves[i] = (p.getNbChiffres() - 1 - (nbToursInitial - nbTours));
     			i++;
     			reponse[0]--;
     		}
-    		etape1 = utile.verificationEtape1(i, grandeurDuNb);
+    		etape1 = utile.verificationEtape1(i);
     		nbTours--;	
     	}
-    	int combinaison[][] = new int [5][grandeurDuNb];
-    	combinaison[1] = utile.remplirCombinaison1(combinaison[1], grandeurDuNb);
-    	int chiffreTeste = 99;
-    	combinaison [3] = chiffresTrouves;
-    	for (int o = 0; o < grandeurDuNb ; o++)
-    	{
-    		if (combinaison[3][o] == premierChiffreATester[0])
+    	int combinaison[][] = new int [5][p.getGrandeurDuNb()];			//combinaison est le tableau multi-dimensionnel qui va 
+    	combinaison[1] = utile.remplirCombinaison1(combinaison[1]);		//permettre de ne renvoyer qu'une seule variable dans la
+    	int chiffreTeste = 99;					//deuxième grande boucle. combinaison[0] est la combinaison testé à chaque tour, et change 
+    	combinaison [3] = chiffresTrouves;		//donc à chaque tour, tout en gardant comme base le chiffre qui revient le plus dans 
+    	for (int o = 0; o < p.getGrandeurDuNb() ; o++)	//la solution. combinaison[1] est l'array qui stocke à leur bonne place tous les chiffres bien placés
+    	{		//combinaison[2][0] est le int qui compte le nb de chiffres bien placés trouvés
+    		if (combinaison[3][o] == premierChiffreATester[0])	//combinaison[3] stocke les chiffres trouvés, par ordre décroissant
     		{
     			combinaison[3][o] = 99;
     		}
     	}
-    	for(int m = 0; m < grandeurDuNb ; m++)
+    	for(int m = 0; m < p.getGrandeurDuNb() ; m++)
     	{
     		combinaison[0][m] = premierChiffreATester[0];
     	}
@@ -70,20 +76,20 @@ public class MSMDefenseur {
     	{
     		if (etape2 == false)
     		{
-    				combinaison[0] = utile.premiereCombinaisonEtape2(combinaison[0], grandeurDuNb, premierChiffreATester[0]);
-    				reponseInitiale = utile.comparaisonMastermindDefenseur(solution, combinaison[0], grandeurDuNb);
+    				combinaison[0] = utile.premiereCombinaisonEtape2(combinaison[0], premierChiffreATester[0]);
+    				reponseInitiale = utile.comparaisonMastermindDefenseur(solution, combinaison[0]);
     				etape2 = true;
-    		}
-        	reponse = utile.comparaisonMastermindDefenseur(solution, combinaison[0], grandeurDuNb);
-    		combinaison = utile.combinaisonChoisieEtape2(grandeurDuNb, combinaison, nbChiffres, reponse, reponseInitiale, chiffreTeste, premierChiffreATester);
+    		}	//dans cette seconde grosse boucle, l'ordi teste, un par un les chiffres présents pour savoir à quelle place ils sont
+        	reponse = utile.comparaisonMastermindDefenseur(solution, combinaison[0]);
+    		combinaison = utile.combinaisonChoisieEtape2(combinaison, reponse, reponseInitiale, chiffreTeste, premierChiffreATester);
     		String propositionAdapt = utile.transformationArrayIntEnString(combinaison[0]);
-    		if (combinaison[2][0] == grandeurDuNb)
+    		if (combinaison[2][0] == p.getGrandeurDuNb())
     		{
-    			victoire = utile.victoireMastermindDefenseur(combinaison, victoire, grandeurDuNb, nbTours, nbToursInitial);
+    			victoire = utile.victoireMastermindDefenseur(combinaison, victoire, nbTours, nbToursInitial, type);
     		}
     		else
     		{
-    			victoire = utile.comparaisonMastermind(solutionAdapt, propositionAdapt, grandeurDuNb, victoire, nbTours, nbToursInitial);
+    			victoire = utile.comparaisonMastermind(solutionAdapt, propositionAdapt, victoire, nbTours, nbToursInitial, type);
     		}
     		nbTours--;
     	}
