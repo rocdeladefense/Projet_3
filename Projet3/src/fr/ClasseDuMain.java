@@ -1,6 +1,6 @@
 package fr;
 
-public class main {
+public class ClasseDuMain {
 
 	public static void main(String[] args) {
 	       InitJeux initJeux = new InitJeux();
