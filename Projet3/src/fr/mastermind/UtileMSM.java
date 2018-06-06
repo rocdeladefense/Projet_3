@@ -336,7 +336,7 @@ public class UtileMSM {
 				combinaison[0] = finirDeRemplirCombinaison(combinaison, premierChiffreATester[0]);
 				return combinaison;
 			}
-			int k = getArrayIndex(combinaison[0], premierChiffreATester[0]);
+			int k = trouverValeurDifferente(combinaison[0], premierChiffreATester[0]);
 			int m = 0;
 			int tmp;
 			if (reponse[0] > reponseInitiale[0])
@@ -411,12 +411,12 @@ public class UtileMSM {
 			return combinaison;
 		}
 		
-		public int getArrayIndex(int[] arr,int value) {
+		public int trouverValeurDifferente(int[] combinaison,int j) {
 
 	        int k=0;
-	        for(int i=0;i<arr.length;i++){
+	        for(int i=0;i<combinaison.length;i++){
 
-	            if(arr[i]!=value){
+	            if(combinaison[i]!=j){
 	                k=i;
 	                break;
 	            }
