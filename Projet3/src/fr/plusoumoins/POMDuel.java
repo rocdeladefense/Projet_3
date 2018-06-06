@@ -1,9 +1,14 @@
 package fr.plusoumoins;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.PropertiesFile;
 
 public class POMDuel {
 	private PropertiesFile p;
+	static final Logger logger = LogManager.getLogger(POMDuel.class.getName());
+
 	public POMDuel() {
 		super();
 		p = PropertiesFile.getInstance();
@@ -31,6 +36,7 @@ public class POMDuel {
 	    		verification = utile.verificationNb(solution);
 	    		if(verification == false)
 	    		{
+                	logger.error("Erreur de saisie");
 	    			utile.phraseErreurSaisie();
 	    		}
 	    	}
@@ -51,11 +57,12 @@ public class POMDuel {
 	    	
 	    	String proposition = utile.phraseDeDebut();
 	   	    verificationNb = utile.verificationNb(proposition);
-			while (verificationNb == false)					//l'utilisateur joue en second. Néanmoins, si l'orinateur gagne au 3eme tours
-			 {												//l'utilisateur a évidemment droit à jouer son troisième tour pour tenter d'égaliser 
-			 proposition = utile.phraseDeDebut();
-	         verificationNb = utile.verificationNb(proposition);
-	         utile.phraseErreurSaisie();
+			while (verificationNb == false)					
+			 {												 
+            	logger.error("Erreur de saisie");
+				utile.phraseErreurSaisie();
+				proposition = utile.phraseDeDebut();
+				verificationNb = utile.verificationNb(proposition);
 			 }
 			 victoire = utile.comparaisonPlusOuMoins(nbAleatoire, nbTours, proposition, victoire, nbToursInitial, typeHumain);
         	 nbTours--;

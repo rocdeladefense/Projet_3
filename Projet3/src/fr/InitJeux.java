@@ -1,11 +1,17 @@
 package fr;
 
 	import java.util.Scanner;
-	import fr.mastermind.Mastermind;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fr.mastermind.Mastermind;
 	import fr.plusoumoins.PlusOuMoins;
 	import fr.plusoumoins.Utile;
 
 public class InitJeux {
+
+	   static final Logger logger = LogManager.getLogger(InitJeux.class.getName());
 
 	    private Scanner scb;
 		private Scanner scb2;
@@ -55,6 +61,7 @@ public class InitJeux {
 	    			break;
 	    		default : 
 	    			scb = new Scanner(System.in);
+	    			logger.error("ERREUR Choix Jeu");
 	    			phraseChoixJeuErreur();
 	            	str =  scb.nextLine();
 	            	break;
@@ -71,6 +78,7 @@ public class InitJeux {
 				while (!str.equals(str1) && !str.equals(str2) && !str.equals(str3))
 	            	{
 						scb = new Scanner(System.in);
+						logger.error("Erreur Choix Mode");
 						phraseChoixModeErreur();
 						str = scb.nextLine();
 	            	}		//choix du mode de l'utilisateur, en faisant attention à éviter les erreurs

@@ -1,9 +1,12 @@
 package fr.mastermind;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.PropertiesFile;
 
 public class MSMDuel {
-	private PropertiesFile p;
-
+	private PropertiesFile p;	
+	   static final Logger logger = LogManager.getLogger(MSMDuel.class.getName());
 	
 	public MSMDuel() {
 		super();
@@ -38,6 +41,7 @@ public class MSMDuel {
     		verificationDefenseur = utile.verificationNb(solution);
     		if(verificationDefenseur == false)
     		{
+            	logger.error("Erreur de saisie");
     			utile.phraseErreurSaisie();
     		}
     	}
@@ -73,6 +77,7 @@ public class MSMDuel {
              {
             	 while (verificationNbChallenger != true) 
             	 {
+            		logger.error("Erreur de saisie");
                   	utile.phraseErreurSaisie();
                   	propositionChallenger = utile.phraseDeDebut();
                     verificationNbChallenger = utile.verificationNb(propositionChallenger);

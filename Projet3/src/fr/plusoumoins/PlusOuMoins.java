@@ -1,6 +1,11 @@
 package fr.plusoumoins;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PlusOuMoins {
+	
+	   static final Logger logger = LogManager.getLogger(PlusOuMoins.class.getName());
     public void choixMode (int choixMode) {
         POMChallenger POMch = new POMChallenger();
         POMDefenseur POMde = new POMDefenseur();

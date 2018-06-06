@@ -1,8 +1,12 @@
 package fr.mastermind;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.PropertiesFile;
 
 public class MSMDefenseur {
 	private PropertiesFile p;
+	static final Logger logger = LogManager.getLogger(MSMDefenseur.class.getName());
 
 	public MSMDefenseur() {
 		super();
@@ -31,6 +35,7 @@ public class MSMDefenseur {
     		verification = utile.verificationNb(solution);
     		if(verification == false)
     		{
+            	logger.error("Erreur de saisie");
     			utile.phraseErreurSaisie();
     		}
     	}

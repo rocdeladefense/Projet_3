@@ -1,15 +1,20 @@
 package fr.plusoumoins;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.PropertiesFile;
 
 public class POMChallenger {	    
 	private PropertiesFile p;
+	   static final Logger logger = LogManager.getLogger(POMChallenger.class.getName());
 
 	public POMChallenger() {
 		super();
 		p = PropertiesFile.getInstance();
 	}
-	    public void init() {
+	    
+	public void init() {
 
 	    	Utile utile = new Utile();
 	    	int nbAleatoire = utile.genererNbAleatoire();		//l'ordinateur choisit ce qui sera la solution
@@ -30,6 +35,7 @@ public class POMChallenger {
 	                }				//la boucle agit tant que la bonne réponse n'est pas trouvé, tout en décrémentant le nbTours
 	                else 
 	                {
+	                	logger.error("Erreur de saisie");
 	                	utile.phraseErreurSaisie();
 	                }    
 

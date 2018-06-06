@@ -1,12 +1,15 @@
 package fr.plusoumoins;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.PropertiesFile;
 
 public class POMDefenseur {
 	private PropertiesFile p;
-
-	
-    public POMDefenseur() {
+	static final Logger logger = LogManager.getLogger(POMDefenseur.class.getName());
+    
+	public POMDefenseur() {
 		super();
 		p = PropertiesFile.getInstance();
 	}
@@ -29,6 +32,7 @@ public class POMDefenseur {
     		verification = utile.verificationNb(solution);		//demande une solution pour le jeu à l'utilisateur
     		if(verification == false)
     		{
+            	logger.error("Erreur de saisie");
     			utile.phraseErreurSaisie();
     		}
     	}
