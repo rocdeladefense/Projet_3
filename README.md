@@ -15,7 +15,7 @@ Comment le programme fonctionne ?
 Il faut simplement suivre les indications ecrites dans la console pour interagir avec le programme et pouvoir jouer.
 Vous pouvez configurer le nombre de cases, le nombre de tours pour les deux jeux et le nombre de chiffres differents
 utilises pour le mastermind, grace au fichier config.properties. Dans ce fichier, vous pourrez aussi activer ou non le 
-
 mode developpeur. Ce mode permet, quand l'ordinateur choisit une solution lui-meme, de connaitre la solution avant, pour 
-pouvoir tester l'application differemment ; pour cela, il faut rentrer modifier le parametre MODEDEVELOPPEUR a 99 (tout autre
-parametrage desactivera le mode developpeur).
+pouvoir tester l'application differemment ; pour cela, il faut rentrer le parametre MODEDEVELOPPEUR a 99 (tout autre
+parametrage desactivera le mode developpeur) dans le fichier config.properties, ou rentrer en parametre en lancement de l'application 99
+(tout autre parametre desactivera le mode developpeur).

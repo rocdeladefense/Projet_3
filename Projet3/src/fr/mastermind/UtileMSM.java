@@ -521,7 +521,7 @@ public class UtileMSM {
 	
 	    public void modeDeveloppeur(int[] nbAleatoire)
 	    {
-	    	if (p.getModeDev() == 99)
+	    	if (p.getModeDev() == 99 || p.getModeDev2() == 99)
 	    	{
 	    		String solution = transformationArrayIntEnString(nbAleatoire);
 	    		System.out.println("Mode Developpeur activé, la solution est " + solution);

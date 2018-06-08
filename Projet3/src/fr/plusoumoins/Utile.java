@@ -9,7 +9,7 @@ public class Utile {
 	private Scanner scb;
 	private PropertiesFile p;
 
-
+	
 	public Utile() {
 		super();
 		p = PropertiesFile.getInstance();
@@ -292,7 +292,7 @@ public class Utile {
 	
 	  public void modeDeveloppeur(int nbAleatoire)
 	    {
-	    	if (p.getModeDev() == 99)
+	    	if (p.getModeDev() == 99 || p.getModeDev2() == 99)
 	    	{
 	    		String solution = transformationIntEnString(nbAleatoire);
 	    		int [] solutionArrayInt = transformationStringEnArrayInt(solution);

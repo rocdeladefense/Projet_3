@@ -15,7 +15,8 @@ public class PropertiesFile {
 		private static int grandeurDuNb;		
 		private static int nbTours;				
 		private static int nbChiffres;			//nombre de chiffres utilisables dans le mastermind
-		private static int modeDev;				//mode pour connaître la réponse avant de commencer dans les modes challenger et duel
+		private static int modeDev;	
+		public static int modeDev2;		//mode pour connaître la réponse avant de commencer dans les modes challenger et duel
 		
 		//singleton
 
@@ -27,13 +28,11 @@ public class PropertiesFile {
 				init();
 			}
 			return INSTANCE;
-		}
-		
+		} 
 		
 		 public static void init(){
 		      Properties properties = new Properties();
 		      InputStream input = null;
-
 		      try {
 		         input = new FileInputStream("config.properties");
 		      } catch (FileNotFoundException e) {
@@ -71,7 +70,16 @@ public class PropertiesFile {
 		}
 
 
-		public static int getModeDev() {
+		public int getModeDev() {
 			return modeDev;
 		}
+
+		public int getModeDev2() {
+			return this.modeDev2;
+		}
+
+		public void setModeDev2(int modeDev2) {
+			PropertiesFile.modeDev2 = modeDev2;
+		}
+
 }

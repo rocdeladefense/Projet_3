@@ -19,7 +19,7 @@ public class InitJeux {
 		String str1 = "1";
 		String str2 = "2";
 		String str3 = "3";
-		
+
 		public void phraseChoixJeu()
 		{
 			System.out.println("Choisissez à quel jeu voulez vous jouez : \nTapez 1 pour le +/- \nTapez 2 pour le Mastermind");
@@ -138,8 +138,7 @@ public class InitJeux {
 		    		break;
 		    	case 3 :
 		    		rejouer = false;
-		    		break;
-		    		
+		    		break;		
 		    }
 
 		    }
